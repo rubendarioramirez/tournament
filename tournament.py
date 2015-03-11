@@ -13,7 +13,16 @@ def connect():
 
 def deleteMatches():
     """Remove all the match records from the database."""
-
+    #Connect to database
+    db = connect()
+    #create the cursor
+    c = db.cursor()
+    #execute the query
+    c.execute("DELETE FROM matches")
+    #commit delete if all goes fine
+    db.commit()
+    #close the database since i dont need it anymore
+    db.close()
 
 def deletePlayers():
     """Remove all the player records from the database."""
@@ -76,7 +85,16 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-    
+    #Connect to database
+    db = connect()
+    #create the cursor
+    c = db.cursor()
+    #execute the query - The %s means save this space for the variable, and then i definy the variable outside
+    c.execute("SELECT * FROM standings")
+
+    return c.fetchall()
+    #close the database since i dont need it anymore
+    db.close()
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -85,7 +103,23 @@ def reportMatch(winner, loser):
       winner:  the id number of the player who won
       loser:  the id number of the player who lost
     """
- 
+    #Connect to database
+    db = connect()
+    #create the cursor
+    c = db.cursor()
+    
+    #execute the query for the winner
+    c.execute("INSERT INTO matches (id, result) VALUES (%s, 1)", (winner,))
+    #commit if all goes fine
+    db.commit()
+
+    #execute the query for the loser
+    c.execute("INSERT INTO matches (id, result) VALUES (%s, 0)", (loser,))
+    #commit if all goes fine
+    db.commit()
+
+    #close the database since i dont need it anymore
+    db.close()
  
 def swissPairings():
     """Returns a list of pairs of players for the next round of a match.

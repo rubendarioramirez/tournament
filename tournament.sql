@@ -20,7 +20,6 @@ CREATE TABLE matches (id INTEGER REFERENCES players, result REAL)
 
 -- standings view
 -- Contains the players and their win records, sorted by wins.
--- This view is used in playerStandings function.
 CREATE VIEW standings AS
     SELECT players.id, players.name, COALESCE(sum(matches.result), 0) AS wins, count(matches.result)
     FROM players LEFT JOIN matches
