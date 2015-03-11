@@ -9,6 +9,21 @@
 -- Create database
 CREATE DATABASE tournament;
 
---CREATE TABLES
-CREATE TABLE players (id serial primary key, name text)
+--CREATE TABLES --
 
+-- Create player table
+CREATE TABLE players (id serial primary key, name text)
+-- Create matches table which contains the data from the matches.
+    -- THe id references the ID in players so we can't have any other player.
+    -- The result is a real so should represent 1 to winner and 0 to loser.
+CREATE TABLE matches (id INTEGER REFERENCES players, result REAL)
+
+-- standings view
+-- Contains the players and their win records, sorted by wins.
+-- This view is used in playerStandings function.
+CREATE VIEW standings AS
+    SELECT players.id, players.name, COALESCE(sum(matches.result), 0) AS wins, count(matches.result)
+    FROM players LEFT JOIN matches
+    ON players.id = matches.id
+    GROUP BY players.id
+    ORDER BY wins DESC;

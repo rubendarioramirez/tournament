@@ -76,7 +76,7 @@ def playerStandings():
         wins: the number of matches the player has won
         matches: the number of matches the player has played
     """
-
+    
 
 def reportMatch(winner, loser):
     """Records the outcome of a single match between two players.
@@ -102,5 +102,7 @@ def swissPairings():
         id2: the second player's unique id
         name2: the second player's name
     """
-
+    standings = playerStandings()
+    return [(standings[i-1][0], standings[i-1][1], standings[i][0], standings[i][1])
+            for i in range(1, len(standings), 2)]
 
